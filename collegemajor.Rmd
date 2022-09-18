@@ -1,0 +1,72 @@
+---
+title: "DATA607 | Week 4 Assignment"
+author: "Jhalak Das"
+date: "9/18/2022"
+output: html_document
+---
+
+##### 1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r}
+library(httr)
+url  <- "https://raw.githubusercontent.com/JHALAK-sps/DATA-607/master/majors-list.csv"
+majors <- read.csv(paste0(url), header = TRUE)
+STATorDATA <- grep(pattern = 'STATISTICS|DATA', majors$Major, value = TRUE, ignore.case = TRUE)
+STATorDATA
+```
+
+
+### 2. Write code that transforms the data below:
+
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+
+[13] "olive"        "salal berry"
+
+Into a format like this:
+
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r}
+library(stringr)
+l <- c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+l
+
+x<- paste('c(', paste('"',l,'"',sep = "", collapse = ','), sep = "",')')
+
+writeLines(x)
+```
+
+
+### 3. Describe, in words, what these expressions will match:
+
+`(.)\1\1 `- This regular expression matches an expression containing the same three consecutive characters. eg. bbb, 777, heisooo etc
+
+`"(.)(.)\\2\\1"`  - This will search for two characters repeated, except reverse. Like “abba” or “1331”.
+
+`(..)\1 `- This regular expression matches any two characters followed by the same sequence of the same two characters. Possible matches are 1010, ababb, eabbabab. The matched expression doesn't neccessarily have to be a 
+string.
+
+`"(.).\\1.\\1"`  - It matches an expression that contains five characters where the first, third and fifth are the same and the second and fourth can be anything. eg 94969 or yayay
+
+`"(.)(.)(.).*\\3\\2\\1"` - 6 or more carachters where the first three charachters are the same as the last three in reverse order (abcxyzcba)
+
+
+### 4. Construct regular expressions to match words that...
+Start and end with the same character. - `^(.).*\1$`  
+Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.) - `([a-zA-Z][a-zA-Z]).*\1  `  
+Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.) - `([a-zA-Z]).*\1.*\1  `  
+
+
+##### Start and end with the same character.
+"^(.).*\\1$"
+
+##### Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+"(..).*\\1"
+
+##### Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+"(.).*\\1.*\\1"
